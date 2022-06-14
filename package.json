@@ -1,0 +1,16 @@
+{
+	"name": "Speedruncomapi",
+	"version": "1.0.0",
+	"description": "A test using the speedrun.com api",
+	"main": "app.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"keywords": [],
+	"author": "Badonyt",
+	"license": "MIT",
+	"dependencies": {
+		"discord.js": "^13.7.0",
+		"https": "^1.0.0"
+	}
+}
