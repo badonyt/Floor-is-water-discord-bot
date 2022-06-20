@@ -1,7 +1,7 @@
 const https = require("https");
 let Leaderboard = NaN;
-const httpsrequestlinkany =
-	"https://www.speedrun.com/api/v1/leaderboards/o6gn8291/category/5dwnm8gd?var-7891w53n=4qyg0edq";
+const httpsrequestlinkany11 = "https://www.speedrun.com/api/v1/leaderboards/o6gn8291/category/5dwnm8gd?var-7891w53n=4qyg0edq";
+const httpsrequestlinkany10 = "https://www.speedrun.com/api/v1/leaderboards/o6gn8291/category/5dwnm8gd?var-7891w53n=5q8wy76q";
 const Discord = require("discord.js");
 const client = new Discord.Client({ intents: ["GUILDS", "GUILD_MESSAGES"] });
 const prefix = ".";
@@ -47,9 +47,14 @@ client.on("message", (message) => {
 		var botping = Math.round(client.ws.ping);
 		console.log(`The users ${message.author.tag} ping is ${yourping}`);
 		message.channel.send(`Bots ping: ${botping}`);
-	} else if (command == "anywr1.1") {
-		try {
-			https.get(httpsrequestlinkany, (response) => {
+	} else if (command == "anywr") {
+		const versionany = args.join(" ");
+        if (!versionany){
+			return message.reply("please specify the version")
+		}else if(versionany == "1.1"){
+        
+
+			https.get(httpsrequestlinkany11, (response) => {
 				let body = "";
 				response.on("data", (chunk) => {
 					body += chunk;
@@ -61,10 +66,10 @@ client.on("message", (message) => {
 					finaldata = bodyString;
 					console.log(body);
 					require("fs").writeFileSync(
-						"SpeedrunLeaderboardany.json",
+						"SpeedrunLeaderboardany1.1.json",
 						JSON.stringify(body)
 					);
-					Leaderboard = require("./SpeedrunLeaderboardany.json");
+					Leaderboard = require("./SpeedrunLeaderboardany1.1.json");
 					console.log(Leaderboard.data);
 
 					message.channel.send(
@@ -76,12 +81,36 @@ client.on("message", (message) => {
 					);
 				});
 			});
-		} catch (err) {
-			console.log("We couldnt perform this action try again later");
-			message.channel.send(
-				"We couldnt perform this action try again later"
-			);
-			message.channel.send(err);
+		}else if(versionany == "1.0"){
+			https.get(httpsrequestlinkany10, (response) => {
+				let body = "";
+				response.on("data", (chunk) => {
+					body += chunk;
+				});
+				let bodyString;
+
+				response.on("end", () => {
+					bodyString = body.toString();
+					finaldata = bodyString;
+					console.log(body);
+					require("fs").writeFileSync(
+						"SpeedrunLeaderboardany1.0.json",
+						JSON.stringify(body)
+					);
+					Leaderboard = require("./SpeedrunLeaderboardany1.0.json");
+					console.log(Leaderboard.data);
+
+					message.channel.send(
+						"The link of the wr is " +
+							JSON.parse(Leaderboard).data.runs[0].run.weblink +
+							" with a time of " +
+							JSON.parse(Leaderboard).data.runs[0].run.times
+								.primary_t
+					);
+				});
+			});
+		}else{
+			message.channel.send("please send something available in the commands list")
 		}
 	} else if (command == "help") {
 		client.commands.get("help").execute(message, args);
@@ -96,7 +125,7 @@ client.on("message", (message) => {
 	} else if (command == "server") {
 		message.author.send("ok");
 	} else if (command == "commands") {
-		message.channel.send("ping, anywr1.1, diewr1.1, help");
+		message.channel.send("ping, anywr 1.1, diewr1.1, help, anywr 1.0");
 	}else if(command == "diewr1.1"){
 		try {
 			https.get(httpsrequestlinkdie, (response) => {
